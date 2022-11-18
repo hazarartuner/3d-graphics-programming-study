@@ -121,6 +121,20 @@ void draw_grid(int space, uint32_t gridColor) {
     }
 }
 
+void draw_rect(int posX, int posY, int width, int height, uint32_t fillColor) {
+    int maxY = posY + height;
+        maxY = maxY <= window_height ? maxY : window_height;
+
+    int maxX = posX + width;
+        maxX = maxX <= window_width ? maxX : window_width;
+
+    for (int y = posY; y < maxY; y++) {
+        for (int x = posX; x < maxX; x++) {
+            color_buffer[(window_width * y) + x] = fillColor;
+        }
+    }
+}
+
 void update(void) {
     // TODO
 }
@@ -130,6 +144,8 @@ void render(void) {
     SDL_RenderClear(renderer);
 
     draw_grid(40, 0xFFAAAAAA);
+
+    draw_rect(1800, 300, 300, 150, 0xFFFF0000);
 
     render_color_buffer();
 

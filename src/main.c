@@ -111,6 +111,16 @@ void clear_color_buffer(uint32_t color) {
     }
 }
 
+void draw_grid(int space, uint32_t gridColor) {
+    for (int y = 0; y < window_height; y++) {
+        for (int x = 0; x < window_width; x++) {
+            if ((y > 0 && y % space == 0) || (x > 0 && x % space == 0)) {
+                color_buffer[(window_width * y) + x] = gridColor;
+            }
+        }
+    }
+}
+
 void update(void) {
     // TODO
 }
@@ -119,8 +129,11 @@ void render(void) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
+    draw_grid(40, 0xFFAAAAAA);
+
     render_color_buffer();
-    clear_color_buffer(0XFFFFFF00);
+
+    clear_color_buffer(0XFFFFFFFF);
 
     SDL_RenderPresent(renderer);
 }

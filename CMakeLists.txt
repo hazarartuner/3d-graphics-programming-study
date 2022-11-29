@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.23)
 project(3DGP C)
 
 set(CMAKE_C_STANDARD 99)
-set(SOURCE_FILES src/main.c src/display.c src/display.h)
+set(SOURCE_FILES src/main.c src/display.c src/display.h src/vector.c src/vector.h)
 
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})

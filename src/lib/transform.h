@@ -6,6 +6,8 @@
 #define INC_3DGP_TRANSFORM_H
 
 #include "vector.h"
+#include "math.h"
+#include "stdbool.h"
 
 struct Transform {
   vec3_t position;
@@ -13,6 +15,10 @@ struct Transform {
   vec3_t scale;
 };
 
-void translate(vec3_t points[], vec3_t translated_points[], int pointCount, struct Transform transform);
+vec3_t rotateX(vec3_t point, float rotation);
+vec3_t rotateY(vec3_t point, float rotation);
+vec3_t rotateZ(vec3_t point, float rotation);
+
+void applyTransform(vec3_t points[], vec3_t translated_points[], int pointCount, struct Transform transform);
 
 #endif //INC_3DGP_TRANSFORM_H

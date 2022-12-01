@@ -5,12 +5,14 @@
 #include "lib/transform.h"
 #include "meshes/cube.h"
 
-const int cubeResolution = 2;
+const int cubeResolution = 4;
 const int cubePointCount = cubeResolution * cubeResolution * cubeResolution;
 vec3_t cubePoints[cubePointCount];
 vec3_t cubeTransformedPoints[cubePointCount];
 
 bool is_running = false;
+vec3_t translateDir = { 0, 0, 0};
+vec3_t rotateDir = { 0, 0, 0};
 
 dimension_t cubeDimension = {
   .width = 1,
@@ -20,6 +22,11 @@ dimension_t cubeDimension = {
 
 struct Transform cubeTransform = {
   .position = {
+    .x = 0,
+    .y = 0,
+    .z = 0,
+  },
+  .rotation = {
     .x = 0,
     .y = 0,
     .z = 0,
@@ -37,6 +44,7 @@ void setup(void) {
     );
 
     createCube(cubePoints, cubeDimension, cubeResolution, cubeTransform);
+    applyTransform(cubePoints, cubeTransformedPoints, cubePointCount, cubeTransform);
 }
 
 void handleInput(void) {
@@ -53,23 +61,49 @@ void handleInput(void) {
             if (event.key.keysym.sym == SDLK_ESCAPE) {
                 is_running = false;
             }
+
+            if (event.key.keysym.sym == SDLK_UP) {
+                translateDir.y = -1;
+            } else if (event.key.keysym.sym == SDLK_DOWN) {
+                translateDir.y = 1;
+            }
+
+            if (event.key.keysym.sym == SDLK_LEFT) {
+                translateDir.x = -1;
+            } else if (event.key.keysym.sym == SDLK_RIGHT) {
+                translateDir.x = 1;
+            }
             break;
+        }
+
+        case SDL_KEYUP: {
+          if (event.key.keysym.sym == SDLK_UP || event.key.keysym.sym == SDLK_DOWN) {
+            translateDir.y = 0;
+          }
+
+          if (event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_RIGHT) {
+            translateDir.x = 0;
+          }
         }
     }
 }
 
 void update(void) {
-  if (cubeTransform.position.x < 2) {
-    cubeTransform.position.x += 0.01f;
+  cubeTransform.position.x += translateDir.x * 0.01f;
+  cubeTransform.position.y += translateDir.y * 0.01f;
+  cubeTransform.position.z += translateDir.z * 0.01f;
 
-    translate(cubePoints, cubeTransformedPoints, cubePointCount, cubeTransform);
-  }
+  cubeTransform.rotation.x += 0.01f;
+  cubeTransform.rotation.y += 0.01f;
+  cubeTransform.rotation.z += 0.01f;
+
+  applyTransform(cubePoints, cubeTransformedPoints, cubePointCount, cubeTransform);
 }
 
 void render(void) {
     drawGrid(40, 0xff444444);
 
-    renderCube(cubeTransformedPoints, cubePointCount);
+    renderCube(cubeTransformedPoints, cubePointCount, 0xfff728e5);
 
     renderColorBuffer();
 

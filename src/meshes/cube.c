@@ -34,7 +34,7 @@ void createCube(vec3_t* points, dimension_t dimension, int resolution, struct Tr
   }
 }
 
-void renderCube(vec3_t* points, int pointCount) {
+void renderCube(vec3_t* points, int pointCount, uint32_t color) {
   for (int i = 0; i < pointCount; i++) {
     vec2_t projectedPoint = projectAsPerspective(points[i]);
 
@@ -43,11 +43,7 @@ void renderCube(vec3_t* points, int pointCount) {
             projectedPoint.y + windowHeight / 2,
             4,
             4,
-            0xfff728e5
+            color
     );
   }
-}
-
-void transform(vec3_t position, vec3_t rotation, vec3_t scale) {
-
 }

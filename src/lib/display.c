@@ -7,13 +7,13 @@
 SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
 
-uint32_t* color_buffer = NULL;
-SDL_Texture* color_buffer_texture = NULL;
+uint32_t* colorBuffer = NULL;
+SDL_Texture* colorBufferTexture = NULL;
 
-int window_width = 800;
-int window_height = 600;
+int windowWidth = 800;
+int windowHeight = 600;
 
-bool initialize_window(bool isFullScreen) {
+bool initializeWindow(bool isFullScreen) {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         fprintf(stderr, "Initializing SDL error.\n");
         return false;
@@ -23,16 +23,16 @@ bool initialize_window(bool isFullScreen) {
     SDL_DisplayMode displayMode;
     SDL_GetDesktopDisplayMode(0, &displayMode);
 
-    window_width = displayMode.w;
-    window_height = displayMode.h;
+    windowWidth = displayMode.w;
+    windowHeight = displayMode.h;
 
     // Create SDL window
     window = SDL_CreateWindow(
             NULL,
             SDL_WINDOWPOS_CENTERED,
             SDL_WINDOWPOS_CENTERED,
-            window_width,
-            window_height,
+            windowWidth,
+            windowHeight,
             SDL_WINDOW_BORDERLESS
     );
 
@@ -60,62 +60,62 @@ bool initialize_window(bool isFullScreen) {
     return true;
 }
 
-void destroy_window(void) {
-    free(color_buffer);
+void destroyWindow(void) {
+    free(colorBuffer);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
 }
 
-void render_color_buffer(void) {
+void renderColorBuffer(void) {
     SDL_UpdateTexture(
-            color_buffer_texture,
+            colorBufferTexture,
             NULL,
-            color_buffer,
-            (int) (window_width * sizeof(uint32_t))
+            colorBuffer,
+            (int) (windowWidth * sizeof(uint32_t))
     );
     SDL_RenderCopy(
             renderer,
-            color_buffer_texture,
+            colorBufferTexture,
             NULL,
             NULL
     );
 }
 
-void clear_color_buffer(uint32_t color) {
-    for (int y = 0; y < window_height; y++) {
-        for (int x = 0; x < window_width; x++) {
-            color_buffer[(window_width * y) + x] = color;
+void clearColorBuffer(uint32_t color) {
+    for (int y = 0; y < windowHeight; y++) {
+        for (int x = 0; x < windowWidth; x++) {
+            colorBuffer[(windowWidth * y) + x] = color;
         }
     }
 }
 
-void draw_pixel(int x, int y, uint32_t color) {
-    if (x > 0 && x < window_width && y > 0 && y < window_height) {
-        color_buffer[(window_width * y) + x] = color;
+void drawPixel(int x, int y, uint32_t color) {
+    if (x > 0 && x < windowWidth && y > 0 && y < windowHeight) {
+        colorBuffer[(windowWidth * y) + x] = color;
     }
 }
 
-void draw_grid(int space, uint32_t gridColor) {
-    for (int y = 0; y < window_height; y++) {
-        for (int x = 0; x < window_width; x++) {
+void drawGrid(int space, uint32_t gridColor) {
+    for (int y = 0; y < windowHeight; y++) {
+        for (int x = 0; x < windowWidth; x++) {
             if ((y > 0 && y % space == 0) || (x > 0 && x % space == 0)) {
-                draw_pixel(x, y, gridColor);
+                drawPixel(x, y, gridColor);
             }
         }
     }
 }
 
-void draw_rect(int posX, int posY, int width, int height, uint32_t fillColor) {
+void drawRect(int posX, int posY, int width, int height, uint32_t fillColor) {
     int maxY = posY + height;
-    maxY = maxY <= window_height ? maxY : window_height;
+    maxY = maxY <= windowHeight ? maxY : windowHeight;
 
     int maxX = posX + width;
-    maxX = maxX <= window_width ? maxX : window_width;
+    maxX = maxX <= windowWidth ? maxX : windowWidth;
 
     for (int y = posY; y < maxY; y++) {
         for (int x = posX; x < maxX; x++) {
-            draw_pixel(x, y, fillColor);
+            drawPixel(x, y, fillColor);
         }
     }
 }

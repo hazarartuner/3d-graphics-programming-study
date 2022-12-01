@@ -1,29 +1,45 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
-#include "display.h"
-#include "vector.h"
+#include "lib/display.h"
+#include "lib/vector.h"
+#include "lib/transform.h"
+#include "meshes/cube.h"
 
-const int N_POINTS = 9 * 9 * 9;
-vec3_t cube_points[N_POINTS];
-vec2_t projected_points[N_POINTS];
-
-float fov_factor = 10;
-vec3_t camera_position = { .x = 0, .y = 0, .z = -2 };
+const int cubeResolution = 2;
+const int cubePointCount = cubeResolution * cubeResolution * cubeResolution;
+vec3_t cubePoints[cubePointCount];
+vec3_t cubeTransformedPoints[cubePointCount];
 
 bool is_running = false;
 
+dimension_t cubeDimension = {
+  .width = 1,
+  .height = 1,
+  .depth = 1
+};
+
+struct Transform cubeTransform = {
+  .position = {
+    .x = 0,
+    .y = 0,
+    .z = 0,
+  }
+};
+
 void setup(void) {
-    color_buffer = (uint32_t*) malloc(sizeof(uint32_t) * window_width * window_height);
-    color_buffer_texture = SDL_CreateTexture(
+    colorBuffer = (uint32_t*) malloc(sizeof(uint32_t) * windowWidth * windowHeight);
+    colorBufferTexture = SDL_CreateTexture(
             renderer,
             SDL_PIXELFORMAT_ARGB8888,
             SDL_TEXTUREACCESS_STREAMING,
-            window_width,
-            window_height
+            windowWidth,
+            windowHeight
     );
+
+    createCube(cubePoints, cubeDimension, cubeResolution, cubeTransform);
 }
 
-void process_input(void) {
+void handleInput(void) {
     SDL_Event event;
     SDL_PollEvent(&event);
 
@@ -42,90 +58,38 @@ void process_input(void) {
     }
 }
 
-vec2_t project(vec3_t point) {
-    vec2_t projected_point = {
-        .x = point.x * fov_factor,
-        .y = point.y * fov_factor
-    };
-
-    return projected_point;
-}
-
-vec2_t project_perspective(vec3_t point) {
-    point.x -= camera_position.x;
-    point.y -= camera_position.y;
-    point.z -= camera_position.z;
-
-    vec2_t projected_point = {
-        .x = point.x * fov_factor / point.z,
-        .y = point.y * fov_factor / point.z
-    };
-
-    return projected_point;
-}
-
-
 void update(void) {
+  if (cubeTransform.position.x < 2) {
+    cubeTransform.position.x += 0.01f;
 
-    int point_index = 0;
-
-    if (fov_factor < 512) {
-      fov_factor += 1;
-    }
-
-    for (float x=-1; x<=1; x += 0.25f) {
-        for (float y=-1; y<=1; y += 0.25f) {
-            for (float z=-1; z<=1; z += 0.25f) {
-                vec3_t point = {
-                        .x = x * 0.25f,
-                        .y = y * 0.25f,
-                        .z = z * 0.25f
-                };
-
-                cube_points[point_index] = point;
-
-                projected_points[point_index] = project_perspective(point);
-
-                point_index += 1;
-            }
-        }
-    }
+    translate(cubePoints, cubeTransformedPoints, cubePointCount, cubeTransform);
+  }
 }
 
 void render(void) {
-    draw_grid(40, 0xff444444);
+    drawGrid(40, 0xff444444);
 
-    for (int i = 0; i < N_POINTS; ++i) {
-        vec2_t point = projected_points[i];
+    renderCube(cubeTransformedPoints, cubePointCount);
 
-        draw_rect(
-            point.x + window_width / 2,
-            point.y + window_height / 2,
-            4,
-            4,
-            0xfff728e5
-        );
-    }
+    renderColorBuffer();
 
-    render_color_buffer();
-
-    clear_color_buffer(0xff222222);
+    clearColorBuffer(0xff222222);
 
     SDL_RenderPresent(renderer);
 }
 
 int main(void) {
-    is_running = initialize_window(false);
+    is_running = initializeWindow(false);
 
     setup();
 
     while(is_running) {
-        process_input();
+        handleInput();
         update();
         render();
     }
 
-    destroy_window();
+    destroyWindow();
 
     return 0;
 }

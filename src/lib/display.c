@@ -4,6 +4,9 @@
 
 #include "display.h"
 
+const float FPS = 60;
+const float TARGET_FRAME_TIME = (1000.0f / FPS);
+
 SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
 

@@ -9,6 +9,9 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 
+const float FPS;
+const float TARGET_FRAME_TIME;
+
 extern SDL_Window* window;
 extern SDL_Renderer* renderer;
 

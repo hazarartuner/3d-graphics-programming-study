@@ -14,6 +14,8 @@ bool is_running = false;
 vec3_t translateDir = { 0, 0, 0};
 vec3_t rotateDir = { 0, 0, 0};
 
+float previous_frame_time = 0;
+
 dimension_t cubeDimension = {
   .width = 1,
   .height = 1,
@@ -118,9 +120,18 @@ int main(void) {
     setup();
 
     while(is_running) {
-        handleInput();
-        update();
-        render();
+      // Fixed frame rate
+      float timeToWait = SDL_GetTicks() - previous_frame_time + TARGET_FRAME_TIME;
+
+      if (timeToWait > 0 && timeToWait <= TARGET_FRAME_TIME) {
+        SDL_Delay(timeToWait);
+      }
+
+      previous_frame_time = SDL_GetTicks();
+
+      handleInput();
+      update();
+      render();
     }
 
     destroyWindow();

@@ -4,7 +4,7 @@
 
 #include "transform.h"
 
-vec3_t rotateX(vec3_t point, float rotation) {
+vec3_t rotateX(vec3_t point, double rotation) {
   vec3_t newRotation = {
       .x = point.x, // lock X
       .y = point.y * cos(rotation) + point.z * sin(rotation),
@@ -14,7 +14,7 @@ vec3_t rotateX(vec3_t point, float rotation) {
   return newRotation;
 }
 
-vec3_t rotateY(vec3_t point, float rotation) {
+vec3_t rotateY(vec3_t point, double rotation) {
   vec3_t newRotation = {
       .x = point.x * cos(rotation) - point.z * sin(rotation),
       .y = point.y, // lock Y
@@ -24,7 +24,7 @@ vec3_t rotateY(vec3_t point, float rotation) {
   return newRotation;
 }
 
-vec3_t rotateZ(vec3_t point, float rotation) {
+vec3_t rotateZ(vec3_t point, double rotation) {
   vec3_t newRotation = {
       .x = point.x * cos(rotation) - point.y * sin(rotation),
       .y = point.y * cos(rotation) + point.x * sin(rotation),

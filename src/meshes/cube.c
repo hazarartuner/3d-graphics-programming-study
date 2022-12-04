@@ -7,19 +7,19 @@
 void createCube(vec3_t* points, dimension_t dimension, int resolution, struct Transform transform) {
   int point_index = 0;
 
-  float fixedResolution = (float) (resolution - 1);
+  double fixedResolution = (double) (resolution - 1);
 
-  float xStep = dimension.width / fixedResolution;
-  float yStep = dimension.height / fixedResolution;
-  float zStep = dimension.depth / fixedResolution;
+  double xStep = dimension.width / fixedResolution;
+  double yStep = dimension.height / fixedResolution;
+  double zStep = dimension.depth / fixedResolution;
   
-  float xHalfLength = dimension.width / 2;
-  float yHalfLength = dimension.height / 2;
-  float zHalfLength = dimension.depth / 2;
+  double xHalfLength = dimension.width / 2;
+  double yHalfLength = dimension.height / 2;
+  double zHalfLength = dimension.depth / 2;
 
-  for (float x=-xHalfLength; x<=xHalfLength; x += xStep) {
-    for (float y=-yHalfLength; y<=yHalfLength; y += yStep) {
-      for (float z=-zHalfLength; z<=zHalfLength; z += zStep) {
+  for (double x=-xHalfLength; x<=xHalfLength; x += xStep) {
+    for (double y=-yHalfLength; y<=yHalfLength; y += yStep) {
+      for (double z=-zHalfLength; z<=zHalfLength; z += zStep) {
         vec3_t point = {
           .x = x + transform.position.x,
           .y = y + transform.position.y,

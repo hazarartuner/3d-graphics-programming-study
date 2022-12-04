@@ -49,3 +49,23 @@ vec3_t translate(vec3_t point, vec3_t position) {
 
     return point;
 }
+
+triangle_t rotateTriangle(triangle_t triangle, vec3_t rotation) {
+    triangle_t rotatedTriangle = {
+            .vertexA = rotate(triangle.vertexA, rotation),
+            .vertexB = rotate(triangle.vertexB, rotation),
+            .vertexC = rotate(triangle.vertexC, rotation),
+    };
+
+    return rotatedTriangle;
+}
+
+triangle_t translateTriangle(triangle_t triangle, vec3_t position) {
+    triangle_t transformedTriangle = {
+            .vertexA = translate(triangle.vertexA, position),
+            .vertexB = translate(triangle.vertexB, position),
+            .vertexC = translate(triangle.vertexC, position),
+    };
+
+    return transformedTriangle;
+}

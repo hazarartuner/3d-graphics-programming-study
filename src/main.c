@@ -5,10 +5,8 @@
 #include "lib/transform.h"
 #include "meshes/cube.h"
 
-const int cubeResolution = 4;
-const int cubePointCount = cubeResolution * cubeResolution * cubeResolution;
-vec3_t cubePoints[cubePointCount];
-vec3_t cubeTransformedPoints[cubePointCount];
+triangle_t cube[12];
+triangle_t cubeTransformed[12];
 
 bool is_running = false;
 vec3_t translateDir = { 0, 0, 0};
@@ -45,7 +43,7 @@ void setup(void) {
             windowHeight
     );
 
-    createCube(cubePoints, cubeDimension, cubeResolution, cubeTransform);
+    createCube(cube);
 }
 
 void handleInput(void) {
@@ -98,16 +96,17 @@ void update(void) {
   cubeTransform.rotation.y += 0.01f;
   cubeTransform.rotation.z += 0.01f;
 
-    for (int i = 0; i < cubePointCount; ++i) {
-        cubeTransformedPoints[i] = rotate(cubePoints[i], cubeTransform.rotation);
-        cubeTransformedPoints[i] = translate(cubeTransformedPoints[i], cubeTransform.position);
+
+    for (int i = 0; i <  12; ++i) {
+        cubeTransformed[i] = rotateTriangle(cube[i], cubeTransform.rotation);
+        cubeTransformed[i] = translateTriangle(cubeTransformed[i], cubeTransform.position);
     }
 }
 
 void render(void) {
     drawGrid(40, 0xff444444);
 
-    renderCube(cubeTransformedPoints, cubePointCount, 0xfff728e5);
+    renderCube(cubeTransformed, 12, 0xfff728e5);
 
     renderColorBuffer();
 

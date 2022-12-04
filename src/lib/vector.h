@@ -2,8 +2,8 @@
 #define INC_3DGP_VECTOR_H
 
 typedef struct {
-    double x;
-    double y;
+    int x;
+    int y;
 } vec2_t;
 
 typedef struct {

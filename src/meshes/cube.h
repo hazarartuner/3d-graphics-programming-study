@@ -9,9 +9,10 @@
 #include "../lib/camera.h"
 #include "../lib/display.h"
 #include "../lib/transform.h"
+#include "../lib/triangle.h"
 
-void createCube(vec3_t* points, dimension_t dimensions, int resolution, struct Transform transform);
+void createCube(triangle_t triangles[]);
 
-void renderCube(vec3_t* points, int pointCount, uint32_t color);
+void renderCube(triangle_t triangles[], int triangleCount, uint32_t color);
 
 #endif //INC_3DGP_CUBE_H

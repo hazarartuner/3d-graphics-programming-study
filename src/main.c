@@ -46,7 +46,6 @@ void setup(void) {
     );
 
     createCube(cubePoints, cubeDimension, cubeResolution, cubeTransform);
-    applyTransform(cubePoints, cubeTransformedPoints, cubePointCount, cubeTransform);
 }
 
 void handleInput(void) {
@@ -99,7 +98,10 @@ void update(void) {
   cubeTransform.rotation.y += 0.01f;
   cubeTransform.rotation.z += 0.01f;
 
-  applyTransform(cubePoints, cubeTransformedPoints, cubePointCount, cubeTransform);
+    for (int i = 0; i < cubePointCount; ++i) {
+        cubeTransformedPoints[i] = rotate(cubePoints[i], cubeTransform.rotation);
+        cubeTransformedPoints[i] = translate(cubeTransformedPoints[i], cubeTransform.position);
+    }
 }
 
 void render(void) {

@@ -19,6 +19,8 @@ vec3_t rotateX(vec3_t point, float rotation);
 vec3_t rotateY(vec3_t point, float rotation);
 vec3_t rotateZ(vec3_t point, float rotation);
 
-void applyTransform(vec3_t points[], vec3_t translated_points[], int pointCount, struct Transform transform);
+vec3_t rotate(vec3_t point, vec3_t rotation);
+
+vec3_t translate(vec3_t point, vec3_t offset);
 
 #endif //INC_3DGP_TRANSFORM_H

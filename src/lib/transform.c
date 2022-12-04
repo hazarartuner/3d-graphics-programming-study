@@ -34,15 +34,18 @@ vec3_t rotateZ(vec3_t point, float rotation) {
   return newRotation;
 }
 
-void applyTransform(vec3_t* points, vec3_t* translated_points, int pointCount, struct Transform transform) {
+vec3_t rotate(vec3_t point, vec3_t rotation) {
+    vec3_t rotatedPoint = rotateX(point, rotation.x);
+    rotatedPoint = rotateY(rotatedPoint, rotation.y);
+    rotatedPoint = rotateZ(rotatedPoint, rotation.z);
 
-  for (int i = 0; i < pointCount; i++) {
-    vec3_t rotatedPoint = rotateX(points[i], transform.rotation.x);
-    rotatedPoint = rotateY(rotatedPoint, transform.rotation.y);
-    rotatedPoint = rotateZ(rotatedPoint, transform.rotation.z);
+    return rotatedPoint;
+}
 
-    translated_points[i].x = rotatedPoint.x + transform.position.x;
-    translated_points[i].y = rotatedPoint.y + transform.position.y;
-    translated_points[i].z = rotatedPoint.z + transform.position.z;
-  }
+vec3_t translate(vec3_t point, vec3_t position) {
+    point.x += position.x;
+    point.y += position.y;
+    point.z += position.z;
+
+    return point;
 }

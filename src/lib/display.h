@@ -9,6 +9,8 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 #include "vector.h"
+#include "triangle.h"
+#include "../lib/camera.h"
 
 const float FPS;
 const float TARGET_FRAME_TIME;
@@ -25,6 +27,7 @@ extern int windowHeight;
 bool initializeWindow(bool isFullScreen);
 void destroyWindow(void);
 void renderColorBuffer(void);
+void renderMesh(triangle_t meshTriangles[], int meshTriangleCount, uint32_t vertexColor, uint32_t edgeColor);
 void clearColorBuffer(uint32_t color);
 void drawPixel(int x, int y, uint32_t color);
 void drawGrid(int space, uint32_t gridColor);

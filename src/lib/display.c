@@ -93,6 +93,33 @@ void clearColorBuffer(uint32_t color) {
     }
 }
 
+void renderMesh(triangle_t meshTriangles[], int meshTriangleCount, uint32_t vertexColor, uint32_t edgeColor) {
+    for (int i = 0; i < meshTriangleCount; i++) {
+        vec2_t projectedPoints[3];
+
+        // Project points
+        projectedPoints[0]= projectAsPerspective(meshTriangles[i].vertexA);
+        projectedPoints[1]= projectAsPerspective(meshTriangles[i].vertexB);
+        projectedPoints[2]= projectAsPerspective(meshTriangles[i].vertexC);
+
+        // Draw line between projected points to render triangle edges
+        drawLine(projectedPoints[0], projectedPoints[1], edgeColor);
+        drawLine(projectedPoints[1], projectedPoints[2], edgeColor);
+        drawLine(projectedPoints[2], projectedPoints[0], edgeColor);
+
+        // Draw vertexes
+        for (int j = 0; j < 3; j++) {
+            drawRect(
+                    projectedPoints[j].x,
+                    projectedPoints[j].y,
+                    4,
+                    4,
+                    vertexColor
+            );
+        }
+    }
+}
+
 void drawPixel(int x, int y, uint32_t color) {
     if (x > 0 && x < windowWidth && y > 0 && y < windowHeight) {
         colorBuffer[(windowWidth * y) + x] = color;
@@ -127,17 +154,17 @@ void drawLine(vec2_t p1, vec2_t p2, uint32_t color) {
     int delta_x = p2.x - p1.x;
     int delta_y = p2.y - p1.y;
 
-    // By choosing the side, we can calculate the increase
+    // By choosing the longest side, we can calculate the increase
     // ratio of the x and y points correctly.
-    int selected_side = abs(delta_x) > abs(delta_y) ? abs(delta_x) : abs(delta_y);
+    int longest_side_length = abs(delta_x) > abs(delta_y) ? abs(delta_x) : abs(delta_y);
 
-    double x_ct = delta_x / (double) selected_side;
-    double y_ct = delta_y / (double) selected_side;
+    double x_ct = delta_x / (double) longest_side_length;
+    double y_ct = delta_y / (double) longest_side_length;
 
     double current_x = p1.x;
     double current_y = p1.y;
 
-    for (int i=0; i<=selected_side; i++) {
+    for (int i=0; i<=longest_side_length; i++) {
         drawPixel((int) round(current_x), (int) round(current_y), color);
 
         current_x += x_ct;

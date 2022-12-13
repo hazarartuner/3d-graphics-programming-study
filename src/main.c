@@ -106,7 +106,7 @@ void update(void) {
 void render(void) {
     drawGrid(40, 0xff444444);
 
-    renderCube(cubeTransformed, 12, 0xfff728e5, 0xffaaaaaa);
+    renderMesh(cubeTransformed, 12, 0xfff728e5, 0xffaaaaaa);
 
     renderColorBuffer();
 

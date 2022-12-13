@@ -44,7 +44,7 @@ void createCube(triangle_t triangles[]) {
     }
 }
 
-void renderCube(triangle_t triangles[], int triangleCount, uint32_t color) {
+void renderCube(triangle_t triangles[], int triangleCount, uint32_t vertexColor, uint32_t edgeColor) {
   for (int i = 0; i < triangleCount; i++) {
       vec2_t projectedPoints[3];
 
@@ -52,13 +52,18 @@ void renderCube(triangle_t triangles[], int triangleCount, uint32_t color) {
       projectedPoints[1]= projectAsPerspective(triangles[i].vertexB);
       projectedPoints[2]= projectAsPerspective(triangles[i].vertexC);
 
+
+      drawLine(projectedPoints[0], projectedPoints[1], edgeColor);
+      drawLine(projectedPoints[1], projectedPoints[2], edgeColor);
+      drawLine(projectedPoints[2], projectedPoints[0], edgeColor);
+
       for (int j = 0; j < 3; j++) {
         drawRect(
-                projectedPoints[j].x + (int) (windowWidth / 2),
-                projectedPoints[j].y + (int) (windowHeight / 2),
+                projectedPoints[j].x,
+                projectedPoints[j].y,
                 4,
                 4,
-                color
+                vertexColor
         );
       }
   }

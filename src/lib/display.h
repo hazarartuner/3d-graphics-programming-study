@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <SDL2/SDL.h>
+#include "vector.h"
 
 const float FPS;
 const float TARGET_FRAME_TIME;
@@ -28,5 +29,6 @@ void clearColorBuffer(uint32_t color);
 void drawPixel(int x, int y, uint32_t color);
 void drawGrid(int space, uint32_t gridColor);
 void drawRect(int posX, int posY, int width, int height, uint32_t fillColor);
+void drawLine(vec2_t p1, vec2_t p2, uint32_t color);
 
 #endif //INC_3DGP_DISPLAY_H

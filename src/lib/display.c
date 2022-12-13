@@ -122,3 +122,25 @@ void drawRect(int posX, int posY, int width, int height, uint32_t fillColor) {
         }
     }
 }
+
+void drawLine(vec2_t p1, vec2_t p2, uint32_t color) {
+    int delta_x = p2.x - p1.x;
+    int delta_y = p2.y - p1.y;
+
+    // By choosing the side, we can calculate the increase
+    // ratio of the x and y points correctly.
+    int selected_side = abs(delta_x) > abs(delta_y) ? abs(delta_x) : abs(delta_y);
+
+    double x_ct = delta_x / (double) selected_side;
+    double y_ct = delta_y / (double) selected_side;
+
+    double current_x = p1.x;
+    double current_y = p1.y;
+
+    for (int i=0; i<=selected_side; i++) {
+        drawPixel((int) round(current_x), (int) round(current_y), color);
+
+        current_x += x_ct;
+        current_y += y_ct;
+    }
+}

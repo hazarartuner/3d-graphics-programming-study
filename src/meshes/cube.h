@@ -13,6 +13,6 @@
 
 void createCube(triangle_t triangles[]);
 
-void renderCube(triangle_t triangles[], int triangleCount, uint32_t color);
+void renderCube(triangle_t triangles[], int triangleCount, uint32_t vertexColor, uint32_t edgeColor);
 
 #endif //INC_3DGP_CUBE_H

@@ -5,11 +5,11 @@
 #ifndef INC_3DGP_CUBE_H
 #define INC_3DGP_CUBE_H
 
-#include "../lib/vector.h"
 #include "../lib/triangle.h"
-#include "stddef.h"
+#include "../lib/vector.h"
 #include "../packages/dynamicarray/array.h"
+#include "stddef.h"
 
-triangle_t* createCube();
+triangle_t *createCube();
 
-#endif //INC_3DGP_CUBE_H
+#endif  // INC_3DGP_CUBE_H

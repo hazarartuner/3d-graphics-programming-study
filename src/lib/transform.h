@@ -5,10 +5,10 @@
 #ifndef INC_3DGP_TRANSFORM_H
 #define INC_3DGP_TRANSFORM_H
 
-#include "vector.h"
 #include "math.h"
 #include "stdbool.h"
 #include "triangle.h"
+#include "vector.h"
 
 struct Transform {
   vec3_t position;
@@ -28,4 +28,4 @@ triangle_t rotateTriangle(triangle_t triangle, vec3_t rotation);
 
 triangle_t translateTriangle(triangle_t triangle, vec3_t position);
 
-#endif //INC_3DGP_TRANSFORM_H
+#endif  // INC_3DGP_TRANSFORM_H

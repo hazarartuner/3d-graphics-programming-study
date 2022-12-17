@@ -14,4 +14,4 @@ vec2_t projectAsOrthographic(vec3_t point);
 
 vec2_t projectAsPerspective(vec3_t point);
 
-#endif //INC_3DGP_CAMERA_H
+#endif  // INC_3DGP_CAMERA_H

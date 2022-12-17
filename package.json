@@ -1,0 +1,25 @@
+{
+  "name": "3d-graphics-programming-study",
+  "version": "1.0.0",
+  "description": "I use this repository to study about 3D Graphics Programming with C.",
+  "main": "index.js",
+  "repository": "git@github.com:hazarartuner/3d-graphics-programming-study.git",
+  "author": "Mehmet Hazar Artuner <hazar.artuner@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "clang-format": "^1.8.0"
+  },
+  "scripts": {
+    "format": "clang-format -i src/**/*.c src/**/*.h -style=Google",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "cz-conventional-changelog": "3.3.0",
+    "husky": "^8.0.2"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}

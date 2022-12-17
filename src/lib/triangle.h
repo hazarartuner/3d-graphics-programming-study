@@ -8,9 +8,9 @@
 #include "vector.h"
 
 typedef struct {
-    vec3_t vertexA;
-    vec3_t vertexB;
-    vec3_t vertexC;
+  vec3_t vertexA;
+  vec3_t vertexB;
+  vec3_t vertexC;
 } triangle_t;
 
-#endif //INC_3DGP_TRIANGLE_H
+#endif  // INC_3DGP_TRIANGLE_H

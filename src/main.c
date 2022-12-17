@@ -4,21 +4,15 @@
 #include "lib/vector.h"
 #include "lib/transform.h"
 #include "meshes/cube.h"
+#include "packages/dynamicarray/array.h"
 
-triangle_t cube[12];
-triangle_t cubeTransformed[12];
+triangle_t* cube;
+triangle_t* cubeTransformed;
 
 bool is_running = false;
 vec3_t translateDir = { 0, 0, 0};
-vec3_t rotateDir = { 0, 0, 0};
 
 double previous_frame_time = 0;
-
-dimension_t cubeDimension = {
-  .width = 1,
-  .height = 1,
-  .depth = 1
-};
 
 struct Transform cubeTransform = {
   .position = {
@@ -34,6 +28,9 @@ struct Transform cubeTransform = {
 };
 
 void setup(void) {
+    // Crate dynamic arrays
+    cubeTransformed = array_hold(cubeTransformed, 12, sizeof (triangle_t));
+
     colorBuffer = (uint32_t*) malloc(sizeof(uint32_t) * windowWidth * windowHeight);
     colorBufferTexture = SDL_CreateTexture(
             renderer,
@@ -43,7 +40,7 @@ void setup(void) {
             windowHeight
     );
 
-    createCube(cube);
+  cube = createCube();
 }
 
 void handleInput(void) {
@@ -88,14 +85,13 @@ void handleInput(void) {
 }
 
 void update(void) {
-  cubeTransform.position.x += translateDir.x * 0.01f;
-  cubeTransform.position.y += translateDir.y * 0.01f;
-  cubeTransform.position.z += translateDir.z * 0.01f;
+  cubeTransform.position.x += translateDir.x * 0.05f;
+  cubeTransform.position.y += translateDir.y * 0.05f;
+  cubeTransform.position.z += translateDir.z * 0.05f;
 
   cubeTransform.rotation.x += 0.01f;
   cubeTransform.rotation.y += 0.01f;
   cubeTransform.rotation.z += 0.01f;
-
 
     for (int i = 0; i <  12; ++i) {
         cubeTransformed[i] = rotateTriangle(cube[i], cubeTransform.rotation);
@@ -136,6 +132,10 @@ int main(void) {
     }
 
     destroyWindow();
+
+    // Clear dynamic arrays
+    array_free(cubeTransformed);
+    array_free(cube);
 
     return 0;
 }

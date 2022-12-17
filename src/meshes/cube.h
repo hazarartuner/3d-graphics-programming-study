@@ -7,7 +7,9 @@
 
 #include "../lib/vector.h"
 #include "../lib/triangle.h"
+#include "stddef.h"
+#include "../packages/dynamicarray/array.h"
 
-void createCube(triangle_t triangles[]);
+triangle_t* createCube();
 
 #endif //INC_3DGP_CUBE_H

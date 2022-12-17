@@ -4,7 +4,7 @@
 
 #include "cube.h"
 
-void createCube(triangle_t triangles[]) {
+triangle_t* createCube() {
     vec3_t vertices[] = {
         { .x = -1, .y = -1, .z = -1 }, // 1
         { .x = -1, .y =  1, .z = -1 }, // 2
@@ -37,9 +37,13 @@ void createCube(triangle_t triangles[]) {
         { 5, 0, 3 }
     };
 
+    triangle_t *mesh = array_hold(NULL, 12, sizeof (triangle_t));
+
     for (int i = 0; i < 12; i++) {
-        triangles[i].vertexA = vertices[triangleIndexes[i][0]];
-        triangles[i].vertexB = vertices[triangleIndexes[i][1]];
-        triangles[i].vertexC = vertices[triangleIndexes[i][2]];
+        mesh[i].vertexA = vertices[triangleIndexes[i][0]];
+        mesh[i].vertexB = vertices[triangleIndexes[i][1]];
+        mesh[i].vertexC = vertices[triangleIndexes[i][2]];
     }
+
+    return mesh;
 }

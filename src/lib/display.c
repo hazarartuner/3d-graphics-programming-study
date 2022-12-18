@@ -77,15 +77,17 @@ void clearColorBuffer(uint32_t color) {
   }
 }
 
-void renderMesh(triangle_t meshTriangles[], int meshTriangleCount,
-                uint32_t vertexColor, uint32_t edgeColor) {
-  for (int i = 0; i < meshTriangleCount; i++) {
+void renderMesh(mesh_t mesh, uint32_t vertexColor, uint32_t edgeColor) {
+  for (int i = 0; i < mesh.faceCount; i++) {
     vec2_t projectedPoints[3];
 
     // Project points
-    projectedPoints[0] = projectAsPerspective(meshTriangles[i].vertexA);
-    projectedPoints[1] = projectAsPerspective(meshTriangles[i].vertexB);
-    projectedPoints[2] = projectAsPerspective(meshTriangles[i].vertexC);
+    projectedPoints[0] =
+        projectAsPerspective(mesh.transformedPolygons[i].vertexA);
+    projectedPoints[1] =
+        projectAsPerspective(mesh.transformedPolygons[i].vertexB);
+    projectedPoints[2] =
+        projectAsPerspective(mesh.transformedPolygons[i].vertexC);
 
     // Draw line between projected points to render triangle edges
     drawLine(projectedPoints[0], projectedPoints[1], edgeColor);

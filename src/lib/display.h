@@ -10,6 +10,7 @@
 #include <stdio.h>
 
 #include "../lib/camera.h"
+#include "../lib/mesh.h"
 #include "triangle.h"
 #include "vector.h"
 
@@ -28,8 +29,7 @@ extern int windowHeight;
 bool initializeWindow(bool isFullScreen);
 void destroyWindow(void);
 void renderColorBuffer(void);
-void renderMesh(triangle_t meshTriangles[], int meshTriangleCount,
-                uint32_t vertexColor, uint32_t edgeColor);
+void renderMesh(mesh_t mesh, uint32_t vertexColor, uint32_t edgeColor);
 void clearColorBuffer(uint32_t color);
 void drawPixel(int x, int y, uint32_t color);
 void drawGrid(int space, uint32_t gridColor);

@@ -13,10 +13,10 @@ typedef struct {
 } vec3_t;
 
 typedef struct {
-  double width;
-  double height;
-  double depth;
-} dimension_t;
+  int a;
+  int b;
+  int c;
+} face_t;
 
 // TODO: Add functions to manipulate vectors 2D and 3D
 //...

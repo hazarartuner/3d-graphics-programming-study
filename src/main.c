@@ -1,35 +1,20 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
+#include "lib/mesh.h"
 #include "lib/display.h"
 #include "lib/vector.h"
-#include "lib/transform.h"
 #include "meshes/cube.h"
 #include "packages/dynamicarray/array.h"
 
-triangle_t* cube;
-triangle_t* cubeTransformed;
+mesh_t cube;
 
 bool is_running = false;
 vec3_t translateDir = { 0, 0, 0};
 
 double previous_frame_time = 0;
 
-struct Transform cubeTransform = {
-  .position = {
-    .x = 0,
-    .y = 0,
-    .z = 0,
-  },
-  .rotation = {
-    .x = 0,
-    .y = 0,
-    .z = 0,
-  }
-};
-
 void setup(void) {
-    // Crate dynamic arrays
-    cubeTransformed = array_hold(cubeTransformed, 12, sizeof (triangle_t));
+  cube = createCube();
 
     colorBuffer = (uint32_t*) malloc(sizeof(uint32_t) * windowWidth * windowHeight);
     colorBufferTexture = SDL_CreateTexture(
@@ -39,8 +24,6 @@ void setup(void) {
             windowWidth,
             windowHeight
     );
-
-  cube = createCube();
 }
 
 void handleInput(void) {
@@ -85,24 +68,21 @@ void handleInput(void) {
 }
 
 void update(void) {
-  cubeTransform.position.x += translateDir.x * 0.05f;
-  cubeTransform.position.y += translateDir.y * 0.05f;
-  cubeTransform.position.z += translateDir.z * 0.05f;
+  cube.position.x += translateDir.x * 0.05f;
+  cube.position.y += translateDir.y * 0.05f;
+  cube.position.z += translateDir.z * 0.05f;
 
-  cubeTransform.rotation.x += 0.01f;
-  cubeTransform.rotation.y += 0.01f;
-  cubeTransform.rotation.z += 0.01f;
+  cube.rotation.x += 0.01f;
+  cube.rotation.y += 0.01f;
+  cube.rotation.z += 0.01f;
 
-    for (int i = 0; i <  12; ++i) {
-        cubeTransformed[i] = rotateTriangle(cube[i], cubeTransform.rotation);
-        cubeTransformed[i] = translateTriangle(cubeTransformed[i], cubeTransform.position);
-    }
+  applyTransform(&cube);
 }
 
 void render(void) {
     drawGrid(40, 0xff444444);
 
-    renderMesh(cubeTransformed, 12, 0xfff728e5, 0xffaaaaaa);
+    renderMesh(cube.transformedPolygons, 12, 0xfff728e5, 0xffaaaaaa);
 
     renderColorBuffer();
 
@@ -134,8 +114,10 @@ int main(void) {
     destroyWindow();
 
     // Clear dynamic arrays
-    array_free(cubeTransformed);
-    array_free(cube);
+    array_free(cube.vertices);
+    array_free(cube.polygons);
+    array_free(cube.transformedPolygons);
+    array_free(cube.faces);
 
     return 0;
 }

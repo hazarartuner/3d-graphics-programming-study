@@ -7,36 +7,55 @@ This is my studying repository about 3D Computer Graphics Programming.
 ## My Progress
 
 ### 1. Draw Grid and Filled Cube
+<p>
 In this step, I learned the basics of how to draw pixel to the screen by using SDL2 library. I understand what the pixel/color buffer is.
-<br /><br />
+</p>
+
 ![Alt text](src/images/progress/progress-1.png)
 <br />
 ---
 ### 2. Point Cloud Cube with Orthographic Projection
+<p>
 In this step, I learned what the orthographic projection is and how to draw a 3D point cloud cube. With an extra effort I implemented basic transform animation :)
-<br /><br />
+</p>
+
 [![Alt text](src/images/progress/progress-2.png)](https://www.youtube.com/watch?v=Ty153Xvd2vg)
 <br />
 ---
 
 ### 3. Point Cloud Cube with Perspective Projection
+<p>
 In this step, I learned what the perspective projection is and implemented it to the previously created point cloud cube.
-<br /><br />
+</p>
+
 [![Alt text](src/images/progress/progress-3.png)](https://www.youtube.com/watch?v=3LsBvYyZECQ)
 <br />
 ---
 
 ### 4. Rotating Points in 3D Space
+<p>
 In this step, I learned how to rotate a point by using the basic trigonometry formulas. Then I rotate the entire mesh with an animation.
-<br /><br />
+</p>
+
 [![Alt text](src/images/progress/progress-4.png)](https://www.youtube.com/watch?v=SyssFz98J_Q)
 <br />
 ---
 
 ### 5. Triangulated Wireframe Box
+<p>
 In this step, I learned how to draw a line between two points. Then, I refactored my box mesh code to re-structure it as a triangulated mesh. After that, I rendered the triangulated mesh by using the new draw line method that I learned.
-<br /><br />
+</p>
+
 [![Alt text](src/images/progress/progress-5.png)](https://www.youtube.com/watch?v=4Nr7DKie7uM)
+<br />
+---
+
+### 6. Loading .OBJ Files
+<p>
+In this step, I learned how to read and parse .OBJ files. Then, I loaded a F22 aircraft model from a file. Before I watch the Gustavo's solution, I tried by myself and struggled while parsing a string in C. I tried to use regex for all steps but it was hard even I am good at regex. Then I watched the Gustavo's solution and it was much easier and simple and not require to use regexp for all steps :D The regex functions in C is not easy to use for non-familiar developers :)
+</p>
+
+[![Alt text](src/images/progress/progress-6.png)](https://www.youtube.com/watch?v=PQqYeRn6LcQ)
 <br />
 ---
 
@@ -48,4 +67,5 @@ Gustavo Pezzi teaches 3D graphics programming from scratch without using any 3d 
 
 ---
 ### Packages that I used in this project
+
 - Dynamic Array: https://github.com/gustavopezzi/dynamicarray

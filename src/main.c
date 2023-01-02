@@ -1,12 +1,11 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
-#include "lib/mesh.h"
 #include "lib/display.h"
 #include "lib/vector.h"
-#include "meshes/cube.h"
 #include "packages/dynamicarray/array.h"
+#include "libgen.h"
 
-mesh_t cube;
+mesh_t mesh;
 
 bool is_running = false;
 vec3_t translateDir = { 0, 0, 0};
@@ -14,7 +13,7 @@ vec3_t translateDir = { 0, 0, 0};
 double previous_frame_time = 0;
 
 void setup(void) {
-  cube = createCube();
+  mesh = loadMesh(strcat(dirname(__FILE__), "/assets/f22.obj"));
 
   colorBuffer = (uint32_t*) malloc(sizeof(uint32_t) * windowWidth * windowHeight);
   colorBufferTexture = SDL_CreateTexture(
@@ -68,21 +67,21 @@ void handleInput(void) {
 }
 
 void update(void) {
-  cube.position.x += translateDir.x * 0.05f;
-  cube.position.y += translateDir.y * 0.05f;
-  cube.position.z += translateDir.z * 0.05f;
+  mesh.position.x += translateDir.x * 0.05f;
+  mesh.position.y += translateDir.y * 0.05f;
+  mesh.position.z += translateDir.z * 0.05f;
 
-  cube.rotation.x += 0.01f;
-  cube.rotation.y += 0.01f;
-  cube.rotation.z += 0.01f;
+  mesh.rotation.x += 0.01f;
+  mesh.rotation.y += 0.01f;
+  mesh.rotation.z += 0.01f;
 
-  applyTransform(&cube);
+  applyTransform(&mesh);
 }
 
 void render(void) {
   drawGrid(40, 0xff444444);
 
-  renderMesh(cube, 0xfff728e5, 0xffaaaaaa);
+  renderMesh(mesh, 0xfff728e5, 0xffaaaaaa);
 
   renderColorBuffer();
 
@@ -114,10 +113,10 @@ int main(void) {
   destroyWindow();
 
   // Clear dynamic arrays
-  array_free(cube.vertices);
-  array_free(cube.polygons);
-  array_free(cube.transformedPolygons);
-  array_free(cube.faces);
+  array_free(mesh.vertices);
+  array_free(mesh.polygons);
+  array_free(mesh.transformedPolygons);
+  array_free(mesh.faces);
 
   return 0;
 }

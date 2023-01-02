@@ -46,3 +46,58 @@ void applyTransform(mesh_t* mesh) {
         translateTriangle(mesh->transformedPolygons[i], mesh->position);
   }
 }
+
+mesh_t loadMesh(char* filePath) {
+  vec3_t* vertices = NULL;
+  face_t* faces = NULL;
+
+  FILE* fp = fopen(filePath, "r");
+  char* line = NULL;
+  size_t lineCap = 0;
+
+  if (fp == NULL) {
+    perror("File not found");
+  }
+
+  // Read each line by line
+  while (getline(&line, &lineCap, fp) != -1) {
+    // If the line is vertex data
+    if (strncmp(line, "v ", 2) == 0) {
+      float x, y, z;
+
+      sscanf(line, "v %f %f %f", &x, &y, &z);
+
+      vec3_t vertex = {.x = x, .y = y, .z = z};
+
+      array_push(vertices, vertex);
+    }
+    // If the line is face data
+    else if (strncmp(line, "f ", 2) == 0) {
+      int* vertex_indices = malloc(sizeof(int) * 3);
+      int* texture_indices =
+          malloc(sizeof(int) * 3);  // @todo: implement it later
+      int* normal_indices =
+          malloc(sizeof(int) * 3);  // @todo: implement it later
+
+      sscanf(line, "f %d/%d/%d %d/%d/%d %d/%d/%d", &vertex_indices[0],
+             &texture_indices[0], &normal_indices[0], &vertex_indices[1],
+             &texture_indices[1], &normal_indices[1], &vertex_indices[2],
+             &texture_indices[2], &normal_indices[2]);
+
+      face_t face = {
+          .a = vertex_indices[0] - 1,
+          .b = vertex_indices[1] - 1,
+          .c = vertex_indices[2] - 1,
+      };
+
+      array_push(faces, face);
+    }
+  }
+
+  free(line);
+
+  fclose(fp);
+
+  return createMesh(array_length(vertices), vertices, array_length(faces),
+                    faces);
+}

@@ -5,11 +5,15 @@
 #ifndef INC_3DGP_MESH_H
 #define INC_3DGP_MESH_H
 
+#include <regex.h>
+#include <string.h>
+
 #include "../lib/transform.h"
 #include "../lib/triangle.h"
 #include "../lib/vector.h"
 #include "../packages/dynamicarray/array.h"
 #include "stdio.h"
+#include "stdlib.h"
 
 typedef struct {
   int vertexCount;
@@ -26,5 +30,7 @@ mesh_t createMesh(int vertexCount, vec3_t* vertices, int faceCount,
                   face_t* faces);
 
 void applyTransform(mesh_t* mesh);
+
+mesh_t loadMesh(char* filePath);
 
 #endif  // INC_3DGP_MESH_H

@@ -10,12 +10,6 @@
 #include "triangle.h"
 #include "vector.h"
 
-struct Transform {
-  vec3_t position;
-  vec3_t rotation;
-  vec3_t scale;
-};
-
 vec3_t rotateX(vec3_t point, double rotation);
 vec3_t rotateY(vec3_t point, double rotation);
 vec3_t rotateZ(vec3_t point, double rotation);

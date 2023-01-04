@@ -4,40 +4,40 @@
 
 #include "transform.h"
 
-vec3_t rotateX(vec3_t point, double rotation) {
+vec3_t rotateX(vec3_t point, double angle) {
   vec3_t newRotation = {
       .x = point.x,  // lock X
-      .y = point.y * cos(rotation) + point.z * sin(rotation),
-      .z = point.z * cos(rotation) - point.y * sin(rotation),
+      .y = point.y * cos(angle) - point.z * sin(angle),
+      .z = point.y * sin(angle) + point.z * cos(angle),
   };
 
   return newRotation;
 }
 
-vec3_t rotateY(vec3_t point, double rotation) {
+vec3_t rotateY(vec3_t point, double angle) {
   vec3_t newRotation = {
-      .x = point.x * cos(rotation) - point.z * sin(rotation),
+      .x = point.x * cos(angle) - point.z * sin(angle),
       .y = point.y,  // lock Y
-      .z = point.z * cos(rotation) + point.x * sin(rotation),
+      .z = point.x * sin(angle) + point.z * cos(angle),
   };
 
   return newRotation;
 }
 
-vec3_t rotateZ(vec3_t point, double rotation) {
+vec3_t rotateZ(vec3_t point, double angle) {
   vec3_t newRotation = {
-      .x = point.x * cos(rotation) - point.y * sin(rotation),
-      .y = point.y * cos(rotation) + point.x * sin(rotation),
+      .x = point.x * cos(angle) - point.y * sin(angle),
+      .y = point.x * sin(angle) + point.y * cos(angle),
       .z = point.z,  // lock Z
   };
 
   return newRotation;
 }
 
-vec3_t rotate(vec3_t point, vec3_t rotation) {
-  vec3_t rotatedPoint = rotateX(point, rotation.x);
-  rotatedPoint = rotateY(rotatedPoint, rotation.y);
-  rotatedPoint = rotateZ(rotatedPoint, rotation.z);
+vec3_t rotate(vec3_t point, vec3_t angle) {
+  vec3_t rotatedPoint = rotateX(point, angle.x);
+  rotatedPoint = rotateY(rotatedPoint, angle.y);
+  rotatedPoint = rotateZ(rotatedPoint, angle.z);
 
   return rotatedPoint;
 }
@@ -45,16 +45,16 @@ vec3_t rotate(vec3_t point, vec3_t rotation) {
 vec3_t translate(vec3_t point, vec3_t position) {
   point.x += position.x;
   point.y += position.y;
-  point.z += position.z;
+  point.z += position.z - 5;
 
   return point;
 }
 
-triangle_t rotateTriangle(triangle_t triangle, vec3_t rotation) {
+triangle_t rotateTriangle(triangle_t triangle, vec3_t angle) {
   triangle_t rotatedTriangle = {
-      .vertexA = rotate(triangle.vertexA, rotation),
-      .vertexB = rotate(triangle.vertexB, rotation),
-      .vertexC = rotate(triangle.vertexC, rotation),
+      .vertexA = rotate(triangle.vertexA, angle),
+      .vertexB = rotate(triangle.vertexB, angle),
+      .vertexC = rotate(triangle.vertexC, angle),
   };
 
   return rotatedTriangle;

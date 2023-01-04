@@ -46,4 +46,8 @@ vec3_t vec3_mul(vec3_t vec, double factor);
 
 vec3_t vec3_div(vec3_t vec, double factor);
 
+vec3_t vec3_cross(vec3_t a, vec3_t b);
+
+double vec3_dot(vec3_t a, vec3_t b);
+
 #endif  // INC_3DGP_VECTOR_H

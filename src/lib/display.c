@@ -79,6 +79,10 @@ void clearColorBuffer(uint32_t color) {
 
 void renderMesh(mesh_t mesh, uint32_t vertexColor, uint32_t edgeColor) {
   for (int i = 0; i < mesh.faceCount; i++) {
+    if (shouldCullTriangle(mesh.transformedPolygons[i])) {
+      continue;
+    }
+
     vec2_t projectedPoints[3];
 
     // Project points
@@ -152,4 +156,15 @@ void drawLine(vec2_t p1, vec2_t p2, uint32_t color) {
     current_x += x_ct;
     current_y += y_ct;
   }
+}
+
+bool shouldCullTriangle(triangle_t triangle) {
+  vec3_t a = vec3_sub(triangle.vertexB, triangle.vertexA);
+  vec3_t b = vec3_sub(triangle.vertexC, triangle.vertexA);
+
+  vec3_t normal = vec3_cross(a, b);
+
+  vec3_t cameraRayVec = vec3_sub(cameraPosition, triangle.vertexA);
+
+  return vec3_dot(normal, cameraRayVec) <= 0;
 }

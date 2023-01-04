@@ -13,7 +13,7 @@ vec3_t translateDir = { 0, 0, 0};
 double previous_frame_time = 0;
 
 void setup(void) {
-  mesh = loadMesh(strcat(dirname(__FILE__), "/assets/f22.obj"));
+  mesh = loadMesh(strcat(dirname(__FILE__), "/assets/cube.obj"));
 
   colorBuffer = (uint32_t*) malloc(sizeof(uint32_t) * windowWidth * windowHeight);
   colorBufferTexture = SDL_CreateTexture(

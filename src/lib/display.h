@@ -35,5 +35,6 @@ void drawPixel(int x, int y, uint32_t color);
 void drawGrid(int space, uint32_t gridColor);
 void drawRect(int posX, int posY, int width, int height, uint32_t fillColor);
 void drawLine(vec2_t p1, vec2_t p2, uint32_t color);
+bool shouldCullTriangle(triangle_t triangle);
 
 #endif  // INC_3DGP_DISPLAY_H

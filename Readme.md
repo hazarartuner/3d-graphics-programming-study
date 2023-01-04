@@ -55,7 +55,7 @@ In this step, I learned how to draw a line between two points. Then, I refactore
 In this step, I learned how to read and parse .OBJ files. Then, I loaded a F22 aircraft model from a file. Before I watch the Gustavo's solution, I tried by myself and struggled while parsing a string in C. I tried to use regex for all steps but it was hard even I am good at regex. Then I watched the Gustavo's solution and it was much easier and simple and not require to use regexp for all steps :D The regex functions in C is not easy to use for non-familiar developers :)
 </p>
 
-[![Alt text](src/images/progress/progress-6.png)](https://www.youtube.com/watch?v=PQqYeRn6LcQ)
+[![Alt text](src/images/progress/progress-6.png)](https://www.youtube.com/watch?v=6YRxP8DEHtc)
 <br />
 ---
 

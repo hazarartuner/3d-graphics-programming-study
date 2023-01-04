@@ -33,6 +33,8 @@ vec2_t vec2_mul(vec2_t vec, double factor);
 
 vec2_t vec2_div(vec2_t vec, double factor);
 
+void vec2_normalize(vec2_t* vec);
+
 /////////////////////////////////////////////////////
 // Vector 3D Functions
 /////////////////////////////////////////////////////
@@ -49,5 +51,7 @@ vec3_t vec3_div(vec3_t vec, double factor);
 vec3_t vec3_cross(vec3_t a, vec3_t b);
 
 double vec3_dot(vec3_t a, vec3_t b);
+
+void vec3_normalize(vec3_t* vec);
 
 #endif  // INC_3DGP_VECTOR_H

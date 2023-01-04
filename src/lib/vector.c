@@ -34,6 +34,13 @@ vec2_t vec2_div(vec2_t vec, double factor) {
   return result;
 }
 
+void vec2_normalize(vec2_t* vec) {
+  double length = vec2_length(*vec);
+
+  vec->x /= length;
+  vec->y /= length;
+}
+
 /////////////////////////////////////////////////////
 // Vector 3D Functions
 /////////////////////////////////////////////////////
@@ -78,4 +85,12 @@ vec3_t vec3_cross(vec3_t a, vec3_t b) {
 
 double vec3_dot(vec3_t a, vec3_t b) {
   return a.x * b.x + a.y * b.y + a.z * b.z;
+}
+
+void vec3_normalize(vec3_t* vec) {
+  double length = vec3_length(*vec);
+
+  vec->x /= length;
+  vec->y /= length;
+  vec->z /= length;
 }

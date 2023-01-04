@@ -162,7 +162,12 @@ bool shouldCullTriangle(triangle_t triangle) {
   vec3_t a = vec3_sub(triangle.vertexB, triangle.vertexA);
   vec3_t b = vec3_sub(triangle.vertexC, triangle.vertexA);
 
+  vec3_normalize(&a);
+  vec3_normalize(&b);
+
   vec3_t normal = vec3_cross(a, b);
+
+  vec3_normalize(&normal);
 
   vec3_t cameraRayVec = vec3_sub(cameraPosition, triangle.vertexA);
 

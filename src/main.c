@@ -6,6 +6,7 @@
 #include "libgen.h"
 
 mesh_t mesh;
+mesh_t mesh2;
 
 bool is_running = false;
 vec3_t translateDir = { 0, 0, 0};
@@ -14,6 +15,9 @@ double previous_frame_time = 0;
 
 void setup(void) {
   mesh = loadMesh(strcat(dirname(__FILE__), "/assets/cube.obj"));
+  mesh2 = loadMesh(strcat(dirname(__FILE__), "/assets/cube.obj"));
+
+  mesh2.enableBackfaceCulling = true;
 
   colorBuffer = (uint32_t*) malloc(sizeof(uint32_t) * windowWidth * windowHeight);
   colorBufferTexture = SDL_CreateTexture(
@@ -67,21 +71,36 @@ void handleInput(void) {
 }
 
 void update(void) {
-  mesh.position.x += translateDir.x * 0.05f;
+  double offsetX = 3;
+
+  mesh.position.x += translateDir.x * 0.05f + offsetX;
   mesh.position.y += translateDir.y * 0.05f;
   mesh.position.z += translateDir.z * 0.05f;
 
   mesh.rotation.x += 0.01f;
   mesh.rotation.y += 0.01f;
-  mesh.rotation.z += 0.01f;
+//  mesh.rotation.z += 0.01f;
+
+  mesh2.position.x += translateDir.x * 0.05f - offsetX;
+  mesh2.position.y += translateDir.y * 0.05f;
+  mesh2.position.z += translateDir.z * 0.05f;
+
+  mesh2.rotation.x += 0.01f;
+  mesh2.rotation.y += 0.01f;
+//  mesh2.rotation.z += 0.01f;
 
   applyTransform(&mesh);
+  applyTransform(&mesh2);
+
+  mesh.position.x += translateDir.x * 0.05f - offsetX;
+  mesh2.position.x += translateDir.x * 0.05f + offsetX;
 }
 
 void render(void) {
   drawGrid(40, 0xff444444);
 
   renderMesh(mesh, 0xfff728e5, 0xffaaaaaa);
+  renderMesh(mesh2, 0xfff728e5, 0xffaaaaaa);
 
   renderColorBuffer();
 

@@ -79,7 +79,8 @@ void clearColorBuffer(uint32_t color) {
 
 void renderMesh(mesh_t mesh, uint32_t vertexColor, uint32_t edgeColor) {
   for (int i = 0; i < mesh.faceCount; i++) {
-    if (shouldCullTriangle(mesh.transformedPolygons[i])) {
+    if (mesh.enableBackfaceCulling &&
+        shouldCullTriangle(mesh.transformedPolygons[i])) {
       continue;
     }
 

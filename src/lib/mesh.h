@@ -18,6 +18,7 @@
 typedef struct {
   int vertexCount;
   int faceCount;
+  bool enableBackfaceCulling;
   vec3_t* vertices;
   face_t* faces;
   triangle_t* polygons;

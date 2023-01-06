@@ -59,6 +59,15 @@ In this step, I learned how to read and parse .OBJ files. Then, I loaded a F22 a
 <br />
 ---
 
+### 7. Backface Culling
+<p>
+In this step, I learned how to implement back-face culling. It was much easier than I expected. We used two important Math concepts, the Dot Product and the Cross Product. I knew these math concepts before but using them in this implementation was eye opening. I think learning this technique will also help me in game development.
+</p>
+
+[![Alt text](src/images/progress/progress-7.png)](https://www.youtube.com/watch?v=pMPGMhtc3T0)
+<br />
+---
+
 ## About the Course
 
 I study 3D Computer Graphics Programming with this wonderful course: https://pikuma.com/courses/learn-3d-computer-graphics-programming

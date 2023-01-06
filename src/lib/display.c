@@ -77,32 +77,15 @@ void clearColorBuffer(uint32_t color) {
   }
 }
 
-void renderMesh(mesh_t mesh, uint32_t vertexColor, uint32_t edgeColor) {
+void renderMesh(mesh_t mesh, uint32_t edgeColor, uint32_t fillColor) {
   for (int i = 0; i < mesh.faceCount; i++) {
     if (mesh.enableBackfaceCulling &&
         shouldCullTriangle(mesh.transformedPolygons[i])) {
       continue;
     }
 
-    vec2_t projectedPoints[3];
-
-    // Project points
-    projectedPoints[0] =
-        projectAsPerspective(mesh.transformedPolygons[i].vertexA);
-    projectedPoints[1] =
-        projectAsPerspective(mesh.transformedPolygons[i].vertexB);
-    projectedPoints[2] =
-        projectAsPerspective(mesh.transformedPolygons[i].vertexC);
-
-    // Draw line between projected points to render triangle edges
-    drawLine(projectedPoints[0], projectedPoints[1], edgeColor);
-    drawLine(projectedPoints[1], projectedPoints[2], edgeColor);
-    drawLine(projectedPoints[2], projectedPoints[0], edgeColor);
-
-    // Draw vertexes
-    for (int j = 0; j < 3; j++) {
-      drawRect(projectedPoints[j].x, projectedPoints[j].y, 4, 4, vertexColor);
-    }
+    drawTriangle(mesh.transformedPolygons[i], edgeColor, fillColor);
+    drawTriangle(mesh.transformedPolygons[i], edgeColor, -1);
   }
 }
 
@@ -122,15 +105,15 @@ void drawGrid(int space, uint32_t gridColor) {
   }
 }
 
-void drawRect(int posX, int posY, int width, int height, uint32_t fillColor) {
-  int maxY = posY + height;
+void drawRect(vec2_t pos, int width, int height, uint32_t fillColor) {
+  int maxY = pos.y + height;
   maxY = maxY <= windowHeight ? maxY : windowHeight;
 
-  int maxX = posX + width;
+  int maxX = pos.x + width;
   maxX = maxX <= windowWidth ? maxX : windowWidth;
 
-  for (int y = posY; y < maxY; y++) {
-    for (int x = posX; x < maxX; x++) {
+  for (int y = pos.y; y < maxY; y++) {
+    for (int x = pos.x; x < maxX; x++) {
       drawPixel(x, y, fillColor);
     }
   }
@@ -145,11 +128,11 @@ void drawLine(vec2_t p1, vec2_t p2, uint32_t color) {
   int longest_side_length =
       abs(delta_x) > abs(delta_y) ? abs(delta_x) : abs(delta_y);
 
-  double x_ct = delta_x / (double)longest_side_length;
-  double y_ct = delta_y / (double)longest_side_length;
+  float x_ct = delta_x / (float)longest_side_length;
+  float y_ct = delta_y / (float)longest_side_length;
 
-  double current_x = p1.x;
-  double current_y = p1.y;
+  float current_x = p1.x;
+  float current_y = p1.y;
 
   for (int i = 0; i <= longest_side_length; i++) {
     drawPixel((int)round(current_x), (int)round(current_y), color);
@@ -157,6 +140,114 @@ void drawLine(vec2_t p1, vec2_t p2, uint32_t color) {
     current_x += x_ct;
     current_y += y_ct;
   }
+}
+
+void drawFlatBottomTriangle(vec2_t p1, vec2_t p2, vec2_t p3,
+                            uint32_t fillColor) {
+  // Using raw float variables cause issue, therefore
+  // I had to create and use int versions for each property.
+  int x1 = (int)p1.x;
+  int y1 = (int)p1.y;
+  int x2 = (int)p2.x;
+  int y2 = (int)p2.y;
+  int x3 = (int)p3.x;
+  int y3 = (int)p3.y;
+
+  // Calculate slopes for each corner
+  float inverse_slope_1 = (float)(x1 - x2) / (float)(y1 - y2);
+  float inverse_slope_2 = (float)(x1 - x3) / (float)(y1 - y3);
+
+  vec2_t startPoint = p1;
+  vec2_t endPoint = p1;
+
+  int maxWidth = abs(x3 - x2);
+
+  for (int y = y1; y <= y2; y++) {
+    startPoint.x += inverse_slope_1;
+    startPoint.y = (float)y;
+
+    endPoint.x += inverse_slope_2;
+    endPoint.y = (float)y;
+
+    int width = abs(startPoint.x - endPoint.x);
+
+    // fix overflowed values
+    if (width > maxWidth) {
+      startPoint.x = x2;
+      endPoint.x = x3;
+    }
+
+    drawLine(startPoint, endPoint, fillColor);
+  }
+}
+
+void drawFlatTopTriangle(vec2_t p1, vec2_t p2, vec2_t p3, uint32_t fillColor) {
+  // Using raw float variables cause issue, therefore
+  // I had to create and use int versions for each property.
+  int x1 = (int)p1.x;
+  int y1 = (int)p1.y;
+  int x2 = (int)p2.x;
+  int y2 = (int)p2.y;
+  int x3 = (int)p3.x;
+  int y3 = (int)p3.y;
+
+  float inverse_slope_1 = (float)(x2 - x1) / (float)(y2 - y1);
+  float inverse_slope_2 = (float)(x2 - x3) / (float)(y2 - y3);
+
+  vec2_t startPoint = p2;
+  vec2_t endPoint = p2;
+
+  int maxWidth = abs(x3 - x1);
+
+  for (int y = y2; y >= y1; y--) {
+    startPoint.x -= inverse_slope_1;
+    startPoint.y = (float)y;
+
+    endPoint.x -= inverse_slope_2;
+    endPoint.y = (float)y;
+
+    int width = abs(startPoint.x - endPoint.x);
+
+    // fix overflowed values
+    if (width > maxWidth) {
+      startPoint.x = x1;
+      endPoint.x = x3;
+    }
+
+    drawLine(startPoint, endPoint, fillColor);
+  }
+}
+
+void drawTriangle(triangle_t triangle, uint32_t edgeColor, uint32_t fillColor) {
+  vec2_t projectedPoints[3];
+
+  projectedPoints[0] = projectAsPerspective(triangle.vertexA);
+  projectedPoints[1] = projectAsPerspective(triangle.vertexB);
+  projectedPoints[2] = projectAsPerspective(triangle.vertexC);
+
+  if (fillColor != -1) {
+    if (projectedPoints[1].y == projectedPoints[2].y) {
+      drawFlatTopTriangle(projectedPoints[1], projectedPoints[2],
+                          projectedPoints[0], fillColor);
+    } else if (projectedPoints[0].y == projectedPoints[2].y) {
+      drawFlatBottomTriangle(projectedPoints[0], projectedPoints[1],
+                             projectedPoints[2], fillColor);
+
+    } else {
+      vec2_t center = getCenterOfTriangle(projectedPoints);
+
+      drawFlatBottomTriangle(projectedPoints[0], projectedPoints[1], center,
+                             fillColor);
+
+      drawFlatTopTriangle(projectedPoints[1], projectedPoints[2], center,
+                          fillColor);
+    }
+  }
+
+  // Draw line between projected points to render triangle edges
+  drawLine(projectedPoints[0], projectedPoints[1], edgeColor);
+  drawLine(projectedPoints[1], projectedPoints[2], edgeColor);
+  drawLine(projectedPoints[2], projectedPoints[0], edgeColor);
 }
 
 bool shouldCullTriangle(triangle_t triangle) {

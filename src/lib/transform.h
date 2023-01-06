@@ -10,9 +10,9 @@
 #include "triangle.h"
 #include "vector.h"
 
-vec3_t rotateX(vec3_t point, double angle);
-vec3_t rotateY(vec3_t point, double angle);
-vec3_t rotateZ(vec3_t point, double angle);
+vec3_t rotateX(vec3_t point, float angle);
+vec3_t rotateY(vec3_t point, float angle);
+vec3_t rotateZ(vec3_t point, float angle);
 
 vec3_t rotate(vec3_t point, vec3_t angle);
 

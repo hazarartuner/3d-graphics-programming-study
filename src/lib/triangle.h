@@ -13,4 +13,10 @@ typedef struct {
   vec3_t vertexC;
 } triangle_t;
 
+typedef struct {
+  int a;
+  int b;
+  int c;
+} face_t;
+
 #endif  // INC_3DGP_TRIANGLE_H

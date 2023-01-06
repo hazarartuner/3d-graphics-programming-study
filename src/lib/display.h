@@ -26,15 +26,21 @@ extern SDL_Texture *colorBufferTexture;
 extern int windowWidth;
 extern int windowHeight;
 
+enum PROJECTION { PERSPECTIVE = 1, ORTHOGRAPHIC = 2 };
+
 bool initializeWindow(bool isFullScreen);
 void destroyWindow(void);
 void renderColorBuffer(void);
-void renderMesh(mesh_t mesh, uint32_t vertexColor, uint32_t edgeColor);
+void renderMesh(mesh_t mesh, uint32_t edgeColor, uint32_t fillColor);
 void clearColorBuffer(uint32_t color);
 void drawPixel(int x, int y, uint32_t color);
 void drawGrid(int space, uint32_t gridColor);
-void drawRect(int posX, int posY, int width, int height, uint32_t fillColor);
+void drawRect(vec2_t pos, int width, int height, uint32_t fillColor);
 void drawLine(vec2_t p1, vec2_t p2, uint32_t color);
+void drawFlatBottomTriangle(vec2_t p1, vec2_t p2, vec2_t p3,
+                            uint32_t fillColor);
+void drawFlatTopTriangle(vec2_t p1, vec2_t p2, vec2_t p3, uint32_t fillColor);
+void drawTriangle(triangle_t triangle, uint32_t edgeColor, uint32_t fillColor);
 bool shouldCullTriangle(triangle_t triangle);
 
 #endif  // INC_3DGP_DISPLAY_H

@@ -6,18 +6,15 @@
 #include "libgen.h"
 
 mesh_t mesh;
-mesh_t mesh2;
 
 bool is_running = false;
 vec3_t translateDir = { 0, 0, 0};
 
-double previous_frame_time = 0;
+float previous_frame_time = 0;
 
 void setup(void) {
   mesh = loadMesh(strcat(dirname(__FILE__), "/assets/cube.obj"));
-  mesh2 = loadMesh(strcat(dirname(__FILE__), "/assets/cube.obj"));
-
-  mesh2.enableBackfaceCulling = true;
+  mesh.enableBackfaceCulling = true;
 
   colorBuffer = (uint32_t*) malloc(sizeof(uint32_t) * windowWidth * windowHeight);
   colorBufferTexture = SDL_CreateTexture(
@@ -71,9 +68,7 @@ void handleInput(void) {
 }
 
 void update(void) {
-  double offsetX = 3;
-
-  mesh.position.x += translateDir.x * 0.05f + offsetX;
+  mesh.position.x += translateDir.x * 0.05f;
   mesh.position.y += translateDir.y * 0.05f;
   mesh.position.z += translateDir.z * 0.05f;
 
@@ -81,26 +76,26 @@ void update(void) {
   mesh.rotation.y += 0.01f;
 //  mesh.rotation.z += 0.01f;
 
-  mesh2.position.x += translateDir.x * 0.05f - offsetX;
-  mesh2.position.y += translateDir.y * 0.05f;
-  mesh2.position.z += translateDir.z * 0.05f;
-
-  mesh2.rotation.x += 0.01f;
-  mesh2.rotation.y += 0.01f;
-//  mesh2.rotation.z += 0.01f;
-
   applyTransform(&mesh);
-  applyTransform(&mesh2);
-
-  mesh.position.x += translateDir.x * 0.05f - offsetX;
-  mesh2.position.x += translateDir.x * 0.05f + offsetX;
 }
 
 void render(void) {
   drawGrid(40, 0xff444444);
 
-  renderMesh(mesh, 0xfff728e5, 0xffaaaaaa);
-  renderMesh(mesh2, 0xfff728e5, 0xffaaaaaa);
+  renderMesh(mesh, 0xffeeeeee, 0xff2587be);
+
+/* Triangle Rasterization P.O.C - Start */
+//  triangle_t triangle = {
+//      .vertexB = { .x = -5, .y = 1, .z= 10 },
+//      .vertexC = { .x = 1, .y = 5, .z= 10 },
+//      .vertexA = { .x = 6, .y = -5, .z= 10 },
+//  };
+
+//  uint32_t fillColor =  0xff00ff00;
+
+//  drawTriangle(triangle, 0xffffffff, &fillColor);
+//  drawTriangle(triangle, 0xffffffff, NULL);
+/* Triangle Rastearization P.O.C - End */
 
   renderColorBuffer();
 
@@ -116,7 +111,7 @@ int main(void) {
 
   while(is_running) {
     // Fixed frame rate
-    double timeToWait = SDL_GetTicks() - previous_frame_time + TARGET_FRAME_TIME;
+    float timeToWait = SDL_GetTicks() - previous_frame_time + TARGET_FRAME_TIME;
 
     if (timeToWait > 0 && timeToWait <= TARGET_FRAME_TIME) {
       SDL_Delay(timeToWait);

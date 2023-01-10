@@ -18,6 +18,22 @@ void setup(void) {
 
   mesh = loadMesh(strcat(dirname(__FILE__), "/assets/cube.obj"));
 
+  // Set custom color to faces
+  mesh.faces[0].color = 0xffff0000;
+  mesh.faces[1].color = 0xffff0000;
+
+  mesh.faces[2].color = 0xff00ff00;
+  mesh.faces[3].color = 0xff00ff00;
+
+  mesh.faces[4].color = 0xff0000ff;
+  mesh.faces[5].color = 0xff0000ff;
+
+  mesh.faces[6].color = 0xffffff00;
+  mesh.faces[7].color = 0xffffff00;
+
+  mesh.faces[8].color = 0xfff0f0f0;
+  mesh.faces[9].color = 0xfff0f0f0;
+
   colorBuffer = (uint32_t*) malloc(sizeof(uint32_t) * windowWidth * windowHeight);
   colorBufferTexture = SDL_CreateTexture(
           renderer,
@@ -108,7 +124,7 @@ void update(void) {
 void render(void) {
   drawGrid(40, 0xff444444);
 
-  renderMesh(mesh, 0xffff00ff, 0xffeeeeee, 0xff2587be);
+  renderMesh(mesh, 0xffff00ff, 0xffeeeeee, -1);
 
   renderColorBuffer();
 

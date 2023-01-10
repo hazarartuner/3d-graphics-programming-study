@@ -4,8 +4,8 @@
 
 #include "mesh.h"
 
-mesh_t createMesh(int vertexCount, vec3_t* vertices, int faceCount,
-                  face_t* faces) {
+mesh_t createMesh(int faceCount, int vertexCount, face_t* faces,
+                  vec3_t* vertices, vec3_t* normals, vec3_t* texturePositions) {
   mesh_t mesh = {.vertexCount = vertexCount,
                  .faceCount = faceCount,
                  .vertices = NULL,
@@ -25,9 +25,13 @@ mesh_t createMesh(int vertexCount, vec3_t* vertices, int faceCount,
   for (int i = 0; i < faceCount; ++i) {
     // Create polygon
     triangle_t polygon = {
-        .vertexA = vertices[faces[i].a],
-        .vertexB = vertices[faces[i].b],
-        .vertexC = vertices[faces[i].c],
+        .vertices =
+            {
+                vertices[faces[i].vA],
+                vertices[faces[i].vB],
+                vertices[faces[i].vC],
+            },
+        .color = faces[i].color,
     };
 
     array_push(mesh.transformedPolygons, polygon);
@@ -49,6 +53,8 @@ void applyTransform(mesh_t* mesh) {
 
 mesh_t loadMesh(char* filePath) {
   vec3_t* vertices = NULL;
+  vec3_t* normals = NULL;
+  vec3_t* texturePositions = NULL;
   face_t* faces = NULL;
 
   FILE* fp = fopen(filePath, "r");
@@ -71,6 +77,26 @@ mesh_t loadMesh(char* filePath) {
 
       array_push(vertices, vertex);
     }
+    // If the line is normal data
+    else if (strncmp(line, "vn ", 3) == 0) {
+      float x, y, z;
+
+      sscanf(line, "vn %f %f %f", &x, &y, &z);
+
+      vec3_t normal = {.x = x, .y = y, .z = z};
+
+      array_push(normals, normal);
+    }
+    // If the line is normal data
+    else if (strncmp(line, "vt ", 3) == 0) {
+      float x, y, z;
+
+      sscanf(line, "vt %f %f %f", &x, &y, &z);
+
+      vec3_t texturePosition = {.x = x, .y = y, .z = z};
+
+      array_push(texturePositions, texturePosition);
+    }
     // If the line is face data
     else if (strncmp(line, "f ", 2) == 0) {
       int* vertex_indices = malloc(sizeof(int) * 3);
@@ -85,9 +111,20 @@ mesh_t loadMesh(char* filePath) {
              &texture_indices[2], &normal_indices[2]);
 
       face_t face = {
-          .a = vertex_indices[0] - 1,
-          .b = vertex_indices[1] - 1,
-          .c = vertex_indices[2] - 1,
+          .vA = vertex_indices[0] - 1,
+          .vB = vertex_indices[1] - 1,
+          .vC = vertex_indices[2] - 1,
+
+          .nA = normal_indices[0] - 1,
+          .nB = normal_indices[1] - 1,
+          .nC = normal_indices[2] - 1,
+
+          .tA = texture_indices[0] - 1,
+          .tB = texture_indices[1] - 1,
+          .tC = texture_indices[2] - 1,
+
+          // default fill color
+          .color = 0xff2587be,
       };
 
       array_push(faces, face);
@@ -98,6 +135,6 @@ mesh_t loadMesh(char* filePath) {
 
   fclose(fp);
 
-  return createMesh(array_length(vertices), vertices, array_length(faces),
-                    faces);
+  return createMesh(array_length(faces), array_length(vertices), faces,
+                    vertices, normals, texturePositions);
 }

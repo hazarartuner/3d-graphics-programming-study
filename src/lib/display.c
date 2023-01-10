@@ -85,8 +85,9 @@ void renderMesh(mesh_t mesh, uint32_t vertexColor, uint32_t edgeColor,
       continue;
     }
 
-    drawTriangle(mesh.transformedPolygons[i], vertexColor, edgeColor,
-                 fillColor);
+    uint32_t color = fillColor == -1 ? mesh.faces[i].color : fillColor;
+
+    drawTriangle(mesh.transformedPolygons[i], vertexColor, edgeColor, color);
   }
 }
 
@@ -227,9 +228,9 @@ void drawTriangle(triangle_t triangle, uint32_t vertexColor, uint32_t edgeColor,
                   uint32_t fillColor) {
   vec2_t projectedPoints[3];
 
-  projectedPoints[0] = projectAsPerspective(triangle.vertexA);
-  projectedPoints[1] = projectAsPerspective(triangle.vertexB);
-  projectedPoints[2] = projectAsPerspective(triangle.vertexC);
+  projectedPoints[0] = projectAsPerspective(triangle.vertices[0]);
+  projectedPoints[1] = projectAsPerspective(triangle.vertices[1]);
+  projectedPoints[2] = projectAsPerspective(triangle.vertices[2]);
 
   // Fill the vertex
   if (renderMode == SOLID || renderMode == SOLID_WITH_WIREFRAME) {
@@ -269,8 +270,8 @@ void drawTriangle(triangle_t triangle, uint32_t vertexColor, uint32_t edgeColor,
 }
 
 bool shouldCullTriangle(triangle_t triangle) {
-  vec3_t a = vec3_sub(triangle.vertexB, triangle.vertexA);
-  vec3_t b = vec3_sub(triangle.vertexC, triangle.vertexA);
+  vec3_t a = vec3_sub(triangle.vertices[1], triangle.vertices[0]);
+  vec3_t b = vec3_sub(triangle.vertices[2], triangle.vertices[0]);
 
   vec3_normalize(&a);
   vec3_normalize(&b);
@@ -279,7 +280,7 @@ bool shouldCullTriangle(triangle_t triangle) {
 
   vec3_normalize(&normal);
 
-  vec3_t cameraRayVec = vec3_sub(cameraPosition, triangle.vertexA);
+  vec3_t cameraRayVec = vec3_sub(cameraPosition, triangle.vertices[0]);
 
   return vec3_dot(normal, cameraRayVec) <= 0;
 }

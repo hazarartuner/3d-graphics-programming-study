@@ -8,15 +8,8 @@
 #include "vector.h"
 
 typedef struct {
-  vec3_t vertexA;
-  vec3_t vertexB;
-  vec3_t vertexC;
+  vec3_t vertices[3];
+  uint32_t color;
 } triangle_t;
-
-typedef struct {
-  int a;
-  int b;
-  int c;
-} face_t;
 
 #endif  // INC_3DGP_TRIANGLE_H

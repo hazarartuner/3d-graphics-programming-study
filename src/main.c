@@ -19,20 +19,20 @@ void setup(void) {
   mesh = loadMesh(strcat(dirname(__FILE__), "/assets/cube.obj"));
 
   // Set custom color to faces
-  mesh.faces[0].color = 0xffff0000;
-  mesh.faces[1].color = 0xffff0000;
+  mesh.polygons[0].color = 0xffff0000;
+  mesh.polygons[1].color = 0xffff0000;
 
-  mesh.faces[2].color = 0xff00ff00;
-  mesh.faces[3].color = 0xff00ff00;
+  mesh.polygons[2].color = 0xff00ff00;
+  mesh.polygons[3].color = 0xff00ff00;
 
-  mesh.faces[4].color = 0xff0000ff;
-  mesh.faces[5].color = 0xff0000ff;
+  mesh.polygons[4].color = 0xff0000ff;
+  mesh.polygons[5].color = 0xff0000ff;
 
-  mesh.faces[6].color = 0xffffff00;
-  mesh.faces[7].color = 0xffffff00;
+  mesh.polygons[6].color = 0xffffff00;
+  mesh.polygons[7].color = 0xffffff00;
 
-  mesh.faces[8].color = 0xfff0f0f0;
-  mesh.faces[9].color = 0xfff0f0f0;
+  mesh.polygons[8].color = 0xfff0f0f0;
+  mesh.polygons[9].color = 0xfff0f0f0;
 
   colorBuffer = (uint32_t*) malloc(sizeof(uint32_t) * windowWidth * windowHeight);
   colorBufferTexture = SDL_CreateTexture(

@@ -48,6 +48,11 @@ void applyTransform(mesh_t* mesh) {
         rotateTriangle(mesh->polygons[i], mesh->rotation);
     mesh->transformedPolygons[i] =
         translateTriangle(mesh->transformedPolygons[i], mesh->position);
+
+    vec3_t* vertices = mesh->transformedPolygons[i].vertices;
+
+    mesh->transformedPolygons[i].averageDepth =
+        (vertices[0].z + vertices[1].z + vertices[2].z) / 3;
   }
 }
 

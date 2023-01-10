@@ -79,13 +79,16 @@ void clearColorBuffer(uint32_t color) {
 
 void renderMesh(mesh_t mesh, uint32_t vertexColor, uint32_t edgeColor,
                 uint32_t fillColor) {
+  sortTrianglesByAverageDepth(mesh.transformedPolygons, mesh.faceCount, true);
+
   for (int i = 0; i < mesh.faceCount; i++) {
     if (backfaceCulling == BACKFACE_CULLING_ENABLED &&
         shouldCullTriangle(mesh.transformedPolygons[i])) {
       continue;
     }
 
-    uint32_t color = fillColor == -1 ? mesh.faces[i].color : fillColor;
+    uint32_t color =
+        fillColor == -1 ? mesh.transformedPolygons[i].color : fillColor;
 
     drawTriangle(mesh.transformedPolygons[i], vertexColor, edgeColor, color);
   }

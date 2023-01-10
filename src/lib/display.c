@@ -77,15 +77,16 @@ void clearColorBuffer(uint32_t color) {
   }
 }
 
-void renderMesh(mesh_t mesh, uint32_t edgeColor, uint32_t fillColor) {
+void renderMesh(mesh_t mesh, uint32_t vertexColor, uint32_t edgeColor,
+                uint32_t fillColor) {
   for (int i = 0; i < mesh.faceCount; i++) {
-    if (mesh.enableBackfaceCulling &&
+    if (backfaceCulling == BACKFACE_CULLING_ENABLED &&
         shouldCullTriangle(mesh.transformedPolygons[i])) {
       continue;
     }
 
-    drawTriangle(mesh.transformedPolygons[i], edgeColor, fillColor);
-    drawTriangle(mesh.transformedPolygons[i], edgeColor, -1);
+    drawTriangle(mesh.transformedPolygons[i], vertexColor, edgeColor,
+                 fillColor);
   }
 }
 
@@ -105,15 +106,19 @@ void drawGrid(int space, uint32_t gridColor) {
   }
 }
 
-void drawRect(vec2_t pos, int width, int height, uint32_t fillColor) {
-  int maxY = pos.y + height;
-  maxY = maxY <= windowHeight ? maxY : windowHeight;
+void drawRect(vec2_t pos, int width, int height, uint32_t fillColor,
+              bool centerIsOrigin) {
+  int posX = centerIsOrigin ? pos.x - width / 2 : pos.x;
+  int posY = centerIsOrigin ? pos.y - height / 2 : pos.y;
 
-  int maxX = pos.x + width;
+  int maxX = posX + width;
   maxX = maxX <= windowWidth ? maxX : windowWidth;
 
-  for (int y = pos.y; y < maxY; y++) {
-    for (int x = pos.x; x < maxX; x++) {
+  int maxY = posY + height;
+  maxY = maxY <= windowHeight ? maxY : windowHeight;
+
+  for (int y = posY; y < maxY; y++) {
+    for (int x = posX; x < maxX; x++) {
       drawPixel(x, y, fillColor);
     }
   }
@@ -218,14 +223,16 @@ void drawFlatTopTriangle(vec2_t p1, vec2_t p2, vec2_t p3, uint32_t fillColor) {
   }
 }
 
-void drawTriangle(triangle_t triangle, uint32_t edgeColor, uint32_t fillColor) {
+void drawTriangle(triangle_t triangle, uint32_t vertexColor, uint32_t edgeColor,
+                  uint32_t fillColor) {
   vec2_t projectedPoints[3];
 
   projectedPoints[0] = projectAsPerspective(triangle.vertexA);
   projectedPoints[1] = projectAsPerspective(triangle.vertexB);
   projectedPoints[2] = projectAsPerspective(triangle.vertexC);
 
-  if (fillColor != -1) {
+  // Fill the vertex
+  if (renderMode == SOLID || renderMode == SOLID_WITH_WIREFRAME) {
     if (projectedPoints[1].y == projectedPoints[2].y) {
       drawFlatTopTriangle(projectedPoints[1], projectedPoints[2],
                           projectedPoints[0], fillColor);
@@ -245,9 +252,20 @@ void drawTriangle(triangle_t triangle, uint32_t edgeColor, uint32_t fillColor) {
   }
 
   // Draw line between projected points to render triangle edges
-  drawLine(projectedPoints[0], projectedPoints[1], edgeColor);
-  drawLine(projectedPoints[1], projectedPoints[2], edgeColor);
-  drawLine(projectedPoints[2], projectedPoints[0], edgeColor);
+  if (renderMode == WIREFRAME || renderMode == WIREFRAME_AND_VERTEX ||
+      renderMode == SOLID_WITH_WIREFRAME) {
+    drawLine(projectedPoints[0], projectedPoints[1], edgeColor);
+    drawLine(projectedPoints[1], projectedPoints[2], edgeColor);
+    drawLine(projectedPoints[2], projectedPoints[0], edgeColor);
+  }
+
+  if (renderMode == WIREFRAME_AND_VERTEX) {
+    int vertexSize = 5;
+
+    drawRect(projectedPoints[0], vertexSize, vertexSize, vertexColor, true);
+    drawRect(projectedPoints[1], vertexSize, vertexSize, vertexColor, true);
+    drawRect(projectedPoints[2], vertexSize, vertexSize, vertexColor, true);
+  }
 }
 
 bool shouldCullTriangle(triangle_t triangle) {

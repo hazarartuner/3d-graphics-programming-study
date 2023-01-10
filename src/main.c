@@ -13,8 +13,10 @@ vec3_t translateDir = { 0, 0, 0};
 float previous_frame_time = 0;
 
 void setup(void) {
+  renderMode = SOLID_WITH_WIREFRAME;
+  backfaceCulling = BACKFACE_CULLING_ENABLED;
+
   mesh = loadMesh(strcat(dirname(__FILE__), "/assets/cube.obj"));
-  mesh.enableBackfaceCulling = true;
 
   colorBuffer = (uint32_t*) malloc(sizeof(uint32_t) * windowWidth * windowHeight);
   colorBufferTexture = SDL_CreateTexture(
@@ -37,24 +39,48 @@ void handleInput(void) {
       }
 
       case SDL_KEYDOWN: {
+          // quit from the app
           if (event.key.keysym.sym == SDLK_ESCAPE) {
               is_running = false;
           }
 
+          // move vertically
           if (event.key.keysym.sym == SDLK_UP) {
               translateDir.y = -1;
           } else if (event.key.keysym.sym == SDLK_DOWN) {
               translateDir.y = 1;
           }
 
+          // move horizontally
           if (event.key.keysym.sym == SDLK_LEFT) {
               translateDir.x = -1;
           } else if (event.key.keysym.sym == SDLK_RIGHT) {
               translateDir.x = 1;
           }
+
+          // switch between rendering modes
+          if (event.key.keysym.sym == SDLK_1) {
+            renderMode = WIREFRAME_AND_VERTEX;
+          } else if (event.key.keysym.sym == SDLK_2) {
+            renderMode = WIREFRAME;
+          } else if (event.key.keysym.sym == SDLK_3) {
+            renderMode = SOLID;
+          } else if (event.key.keysym.sym == SDLK_4) {
+            renderMode = SOLID_WITH_WIREFRAME;
+          }
+
+          // Toggle backface culling
+          if (event.key.keysym.sym == SDLK_b) {
+            if (backfaceCulling == BACKFACE_CULLING_ENABLED) {
+              backfaceCulling = BACKFACE_CULLING_DISABLED;
+            } else {
+              backfaceCulling = BACKFACE_CULLING_ENABLED;
+            }
+          }
           break;
       }
 
+      // Reset move directions to stop moving
       case SDL_KEYUP: {
         if (event.key.keysym.sym == SDLK_UP || event.key.keysym.sym == SDLK_DOWN) {
           translateDir.y = 0;
@@ -82,20 +108,7 @@ void update(void) {
 void render(void) {
   drawGrid(40, 0xff444444);
 
-  renderMesh(mesh, 0xffeeeeee, 0xff2587be);
-
-/* Triangle Rasterization P.O.C - Start */
-//  triangle_t triangle = {
-//      .vertexB = { .x = -5, .y = 1, .z= 10 },
-//      .vertexC = { .x = 1, .y = 5, .z= 10 },
-//      .vertexA = { .x = 6, .y = -5, .z= 10 },
-//  };
-
-//  uint32_t fillColor =  0xff00ff00;
-
-//  drawTriangle(triangle, 0xffffffff, &fillColor);
-//  drawTriangle(triangle, 0xffffffff, NULL);
-/* Triangle Rastearization P.O.C - End */
+  renderMesh(mesh, 0xffff00ff, 0xffeeeeee, 0xff2587be);
 
   renderColorBuffer();
 

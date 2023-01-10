@@ -68,6 +68,15 @@ In this step, I learned how to implement back-face culling. It was much easier t
 <br />
 ---
 
+
+### 8. Triangle Rasterization
+<p>
+In this step, I learned how to fill a triangle, other means, "rasterization". We used flat-top and flat-bottom technique. I was always curious about filling triangles and it was like a magic thing in my mind until now :D Of course it is not so easy task but it is also not a magic :D</p>
+
+[![Alt text](src/images/progress/progress-8.png)](https://www.youtube.com/watch?v=mQw__o2aTnU)
+<br />
+---
+
 ## About the Course
 
 I study 3D Computer Graphics Programming with this wonderful course: https://pikuma.com/courses/learn-3d-computer-graphics-programming
